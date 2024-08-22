@@ -19,18 +19,18 @@ const pool = mysql.createPool({
 
 // Rota para inserção de dados
 app.post('/insert', (req, res) => {
-  const { name, age } = req.body;
+  const { email, senha } = req.body;
 
-  if (!name || !age) {
+  if (!email || !senha) {
     return res.status(400).json({ error: 'Name and age are required' });
   }
 
-  const query = 'INSERT INTO users (name, age) VALUES (?, ?)';
-  pool.query(query, [name, age], (err, results) => {
+  const query = 'INSERT INTO users (email, senha) VALUES (?, ?)';
+  pool.query(query, [email, senha], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.status(201).json({ id: results.insertId, name, age });
+    res.status(201).json({ id: results.insertId, email, senha });
   });
 });
 

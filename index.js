@@ -51,7 +51,7 @@ app.post('/cadastro', (req, res) => {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
-       res.redirect('/login.html');
+       res.redirect('/login');
     });
   });
 });

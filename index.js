@@ -25,7 +25,7 @@ app.post('/insert', (req, res) => {
     return res.status(400).json({ error: 'Name and age are required' });
   }
 
-  const query = 'INSERT INTO users (email, senha) VALUES (?, ?)';
+  const query = 'INSERT INTO usuario (email, senha) VALUES (?, ?)';
   pool.query(query, [email, senha], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });

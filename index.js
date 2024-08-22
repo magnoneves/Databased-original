@@ -1,10 +1,18 @@
-// index.js
 const express = require('express');
 const mysql = require('mysql2');
+const cors = require('cors'); // Importar o middleware CORS
 const app = express();
 
-// Middleware para parsear JSON
+const corsOptions = {
+  origin: 'http://localhost', // ou uma lista de origens permitidas
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  allowedHeaders: 'Content-Type,Authorization'
+};
+app.use(cors(corsOptions));
+
+// Middleware para parsear JSON e lidar com CORS
 app.use(express.json());
+app.use(cors()); // Habilitar CORS para todas as origens
 
 // Configuração do banco de dados
 const pool = mysql.createPool({
@@ -19,18 +27,18 @@ const pool = mysql.createPool({
 
 // Rota para inserção de dados
 app.post('/insert', (req, res) => {
-  const { name, age } = req.body;
+  const { email, senha } = req.body;
 
-  if (!name || !age) {
-    return res.status(400).json({ error: 'Name and age are required' });
+  if (!email || !senha) {
+    return res.status(400).json({ error: 'Email and senha are required' });
   }
 
-  const query = 'INSERT INTO users (name, age) VALUES (?, ?)';
-  pool.query(query, [name, age], (err, results) => {
+  const query = 'INSERT INTO usuario (email, senha) VALUES (?, ?)';
+  pool.query(query, [email, senha], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.status(201).json({ id: results.insertId, name, age });
+    res.status(201).json({ id: results.insertId, email, senha });
   });
 });
 

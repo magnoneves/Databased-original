@@ -2,6 +2,8 @@ const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors'); // Importar o middleware CORS
 const app = express();
+app.use(express.urlencoded({ extended: true }));
+
 
 const corsOptions = {
   origin: '*', // ou uma lista de origens permitidas
@@ -29,6 +31,10 @@ const pool = mysql.createPool({
 app.post('/insert', (req, res) => {
   const { email, senha } = req.body;
 
+<<<<<<< HEAD
+=======
+  // Verificar se ambos email e senha estão presentes
+>>>>>>> f2ea1050a2797c06c0b4f09e10dddcf0a679a96b
   if (!email || !senha) {
     return res.status(400).json({ error: 'Email and senha are required' });
   }
@@ -41,6 +47,7 @@ app.post('/insert', (req, res) => {
     res.status(201).json({ id: results.insertId, email, senha });
   });
 });
+
 
 // Start the server
 const PORT = process.env.PORT || 3000;

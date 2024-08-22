@@ -27,7 +27,7 @@ const pool = mysql.createPool({
 });
 
 // Rota para inserção de dados com verificação
-app.post('/insert', (req, res) => {
+app.post('/cadastro', (req, res) => {
   const { email, senha } = req.body;
 
   // Verificar se ambos email e senha estão presentes

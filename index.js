@@ -5,13 +5,12 @@ const app = express();
 
 // Configuração do CORS
 const corsOptions = {
-  origin: '*', // Permitir todas as origens; ajuste para um domínio específico em produção
+  origin: '*', 
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   allowedHeaders: 'Content-Type,Authorization'
 };
 app.use(cors(corsOptions));
 
-// Middleware para parsear JSON e dados do formulário
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -47,18 +46,16 @@ app.post('/cadastro', (req, res) => {
       return res.status(409).json({ error: 'Usuario ja existe' });
     }
 
-    // Se o usuário não existir, inserir o novo usuário
     const insertQuery = 'INSERT INTO usuario (nome, email, senha) VALUES (? ,?, ?)';
     pool.query(insertQuery, [nome ,email, senha], (err, results) => {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
-       res.redirect('/login');
+       res.redirect('/login.html');
     });
   });
 });
 
-// Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

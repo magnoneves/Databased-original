@@ -28,11 +28,11 @@ const pool = mysql.createPool({
 
 // Rota para inserção de dados com verificação
 app.post('/cadastro', (req, res) => {
-  const { email, senha } = req.body;
+  const { nome ,email, senha } = req.body;
 
   // Verificar se ambos email e senha estão presentes
-  if (!email || !senha) {
-    return res.status(400).json({ error: 'Email and senha are required' });
+  if (!email || !senha || !nome) {
+    return res.status(400).json({ error: 'email, nome e senha sao necessarios' });
   }
 
   // Primeiro, verificar se o usuário já existe
@@ -44,16 +44,16 @@ app.post('/cadastro', (req, res) => {
 
     // Se o usuário já existir, retornar uma mensagem de erro
     if (results.length > 0) {
-      return res.status(409).json({ error: 'User already exists' });
+      return res.status(409).json({ error: 'Usuario ja existe' });
     }
 
     // Se o usuário não existir, inserir o novo usuário
-    const insertQuery = 'INSERT INTO usuario (email, senha) VALUES (?, ?)';
-    pool.query(insertQuery, [email, senha], (err, results) => {
+    const insertQuery = 'INSERT INTO usuario (nome, email, senha) VALUES (? ,?, ?)';
+    pool.query(insertQuery, [nome ,email, senha], (err, results) => {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
-      res.status(201).json({ id: results.insertId, email, senha });
+       res.redirect('/login');
     });
   });
 });

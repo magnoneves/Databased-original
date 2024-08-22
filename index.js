@@ -4,7 +4,7 @@ const cors = require('cors'); // Importar o middleware CORS
 const app = express();
 
 const corsOptions = {
-  origin: 'http://localhost', // ou uma lista de origens permitidas
+  origin: '*', // ou uma lista de origens permitidas
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   allowedHeaders: 'Content-Type,Authorization'
 };

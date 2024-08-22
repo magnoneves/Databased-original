@@ -21,8 +21,9 @@ const pool = mysql.createPool({
 app.post('/insert', (req, res) => {
   const { email, senha } = req.body;
 
+  // Verificar se ambos email e senha estão presentes
   if (!email || !senha) {
-    return res.status(400).json({ error: 'Name and age are required' });
+    return res.status(400).json({ error: 'Email and senha are required' });
   }
 
   const query = 'INSERT INTO usuario (email, senha) VALUES (?, ?)';
@@ -33,6 +34,7 @@ app.post('/insert', (req, res) => {
     res.status(201).json({ id: results.insertId, email, senha });
   });
 });
+
 
 // Start the server
 const PORT = process.env.PORT || 3000;

@@ -2,6 +2,8 @@
 const express = require('express');
 const mysql = require('mysql2');
 const app = express();
+app.use(express.urlencoded({ extended: true }));
+
 
 // Middleware para parsear JSON
 app.use(express.json());

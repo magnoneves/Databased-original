@@ -26,7 +26,7 @@ const pool = mysql.createPool({
   queueLimit: 0
 });
 
-// Rota para inserção de dados
+// Rota para inserção de dados com verificação
 app.post('/insert', (req, res) => {
   const { email, senha } = req.body;
 
@@ -35,12 +35,26 @@ app.post('/insert', (req, res) => {
     return res.status(400).json({ error: 'Email and senha are required' });
   }
 
-  const query = 'INSERT INTO usuario (email, senha) VALUES (?, ?)';
-  pool.query(query, [email, senha], (err, results) => {
+  // Primeiro, verificar se o usuário já existe
+  const checkQuery = 'SELECT * FROM usuario WHERE email = ? AND senha = ?';
+  pool.query(checkQuery, [email, senha], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.status(201).json({ id: results.insertId, email, senha });
+
+    // Se o usuário já existir, retornar uma mensagem de erro
+    if (results.length > 0) {
+      return res.status(409).json({ error: 'User already exists' });
+    }
+
+    // Se o usuário não existir, inserir o novo usuário
+    const insertQuery = 'INSERT INTO usuario (email, senha) VALUES (?, ?)';
+    pool.query(insertQuery, [email, senha], (err, results) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      res.status(201).json({ id: results.insertId, email, senha });
+    });
   });
 });
 

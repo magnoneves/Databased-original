@@ -64,11 +64,10 @@ app.post('/login', (req, res) => {
 
     if (results.length > 0) {
       const user = results[0];
-
-      return res.json({ message: 'login bem sucedido', nome: user.nome });
+      res.json({ message: 'login bem sucedido', nome: user.nome });
+    } else {
+      res.status(400).json({ error: 'usuario não existente' });
     }
-    
-    return res.status(400).json({ error: 'usuario não existente' });
   });
 });
 

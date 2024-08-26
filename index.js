@@ -49,7 +49,7 @@ app.post('/cadastro', (req, res) => {
     });
   });
 });
-app.post('/post', (req, res) => {
+app.post('/login', (req, res) => {
     const { email, senha} = req.body;
     
     if(!email || !senha) {

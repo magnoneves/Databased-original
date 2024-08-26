@@ -49,6 +49,29 @@ app.post('/cadastro', (req, res) => {
     });
   });
 });
+app.post('/post', (req, res) => {
+    const { email, senha} = req.body;
+    
+    if(!email || !senha) {
+      return res.status(400).json({error: 'email e senha sao necessarios'})
+    }
+    const slct = 'SELECT * FROM usuario WHERE email = ? AND senha = ?';
+    pool.query(slct, [email, senha], (err, results) => {
+      if(err) {
+        return res.status(500).json({error: err.message});
+      }
+
+      if(results.length > 0) {
+       res.json({message: 'login bem sucedido'}); 
+      }
+      
+      return res.status(400).json({error: 'usuario não existente'});
+    })
+
+})
+
+
+
 
 
 const PORT = process.env.PORT || 3000;

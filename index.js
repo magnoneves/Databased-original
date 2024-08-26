@@ -35,8 +35,8 @@ app.post('/cadastro', (req, res) => {
   }
 
   // Primeiro, verificar se o usuário já existe
-  const checkQuery = 'SELECT * FROM usuario WHERE email = ? AND senha = ?';
-  pool.query(checkQuery, [email, senha], (err, results) => {
+  const checkQuery = 'SELECT * FROM usuario WHERE email = ?';
+  pool.query(checkQuery, [email], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }

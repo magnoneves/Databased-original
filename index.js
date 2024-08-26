@@ -5,7 +5,7 @@ const app = express();
 
 // Configuração do CORS
 const corsOptions = {
-  origin: '*', 
+  origin: '*',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   allowedHeaders: 'Content-Type,Authorization'
 };
@@ -49,30 +49,38 @@ app.post('/cadastro', (req, res) => {
     });
   });
 });
+
 app.post('/login', (req, res) => {
-    const { email, senha} = req.body;
-    
-    if(!email || !senha) {
-      return res.status(400).json({error: 'email e senha sao necessarios'})
+  const { email, senha } = req.body;
+  
+  if (!email || !senha) {
+    return res.status(400).json({ error: 'email e senha sao necessarios' });
+  }
+  const slct = 'SELECT * FROM usuario WHERE email = ? AND senha = ?';
+  pool.query(slct, [email, senha], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
     }
-    const slct = 'SELECT * FROM usuario WHERE email = ? AND senha = ?';
-    pool.query(slct, [email, senha], (err, results) => {
-      if(err) {
-        return res.status(500).json({error: err.message});
-      }
 
-      if(results.length > 0) {
-       res.json({message: 'login bem sucedido'}); 
-      }
-      
-      return res.status(400).json({error: 'usuario não existente'});
-    })
+    if (results.length > 0) {
+      const user = results[0];
 
-})
+      return res.json({ message: 'login bem sucedido', nome: user.nome });
+    }
+    
+    return res.status(400).json({ error: 'usuario não existente' });
+  });
+});
 
+app.get('/main', (req, res) => {
+  const nome = req.query.nome;
+  
+  if (!nome) {
+    return res.status(400).json({ error: 'nome é necessário' });
+  }
 
-
-
+  res.json({ nome: nome });
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

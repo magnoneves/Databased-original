@@ -27,7 +27,7 @@ const pool = mysql.createPool({
 
 // Rota para inserção de dados com verificação
 app.post('/cadastro', (req, res) => {
-  const { nome ,email, senha } = req.body;
+  const { nome, email, senha } = req.body;
 
   // Verificar se ambos email e senha estão presentes
   if (!email || !senha || !nome) {
@@ -46,15 +46,16 @@ app.post('/cadastro', (req, res) => {
       return res.status(409).json({ error: 'Usuario ja existe' });
     }
 
-    const insertQuery = 'INSERT INTO usuario (nome, email, senha) VALUES (? ,?, ?)';
-    pool.query(insertQuery, [nome ,email, senha], (err, results) => {
+    const insertQuery = 'INSERT INTO usuario (nome, email, senha) VALUES (?, ?, ?)';
+    pool.query(insertQuery, [nome, email, senha], (err, results) => {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
-       res.redirect('magnoneves/Databased-original/views/login.html');
+      res.json({ message: 'sucesso' }); // Responda com JSON indicando sucesso
     });
   });
 });
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

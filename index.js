@@ -26,6 +26,7 @@ const pool = mysql.createPool({
 
 app.post('/cadastro', (req, res) => {
   const { nome, email, senha } = req.body;
+  console.log('Request Body:', req.body); // Adicionado para depuração
 
   if (!email || !senha || !nome) {
     return res.status(400).json({ error: 'email, nome e senha sao necessarios' });
@@ -33,6 +34,7 @@ app.post('/cadastro', (req, res) => {
   const checkQuery = 'SELECT * FROM usuario WHERE email = ?';
   pool.query(checkQuery, [email], (err, results) => {
     if (err) {
+      console.error('Database Error:', err); // Adicionado para depuração
       return res.status(500).json({ error: err.message });
     }
 
@@ -43,6 +45,7 @@ app.post('/cadastro', (req, res) => {
     const insertQuery = 'INSERT INTO usuario (nome, email, senha) VALUES (?, ?, ?)';
     pool.query(insertQuery, [nome, email, senha], (err, results) => {
       if (err) {
+        console.error('Database Error:', err); // Adicionado para depuração
         return res.status(500).json({ error: err.message });
       }
       res.json({ message: 'cadastro bem sucedido' });
